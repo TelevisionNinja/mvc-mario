@@ -11,135 +11,135 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
 class Controller implements MouseListener, KeyListener {
-	View view;
-	Model model;
-	boolean keyLeft = false,
-		keyRight = false,
-		keySave = false,
-		keyLoad = false,
-		editEnabled = false;
-	
-	Controller(Model m) {
-		model = m;
-	}
-	
-	void setView(View v) {
-		view = v;
-	}
-	
-	//-------------------------------------------
-	// mouse functionality
-	
-	public void mousePressed(MouseEvent e) {
-		if (!editEnabled) {
-			return;
-		}
+    View view;
+    Model model;
+    boolean keyLeft = false,
+        keyRight = false,
+        keySave = false,
+        keyLoad = false,
+        editEnabled = false;
 
-		model.sprites.add(new Brick(e.getX() + model.mario.x, e.getY(), 0, 0));
-	}
+    Controller(Model m) {
+        model = m;
+    }
 
-	public void mouseReleased(MouseEvent e) {
-		if (!editEnabled) {
-			return;
-		}
+    void setView(View v) {
+        view = v;
+    }
 
-		Sprite b = model.sprites.get(model.sprites.size() - 1);
-		
-		b.w = e.getX() - b.x + model.mario.x;
-		b.h = e.getY() - b.y;
-	}
+    //-------------------------------------------
+    // mouse functionality
 
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+        if (!editEnabled) {
+            return;
+        }
 
-	public void mouseClicked(MouseEvent e) {
-		if(e.getY() < 100) {
-			System.out.println("break here");
-		}
-	}
-	
-	//-------------------------------------------
-	// keyboard functionality
-	
-	public void keyPressed(KeyEvent e) {
-		switch(e.getKeyCode()) {
-			case KeyEvent.VK_RIGHT:
-				keyRight = true;
-				break;
-			case KeyEvent.VK_LEFT:
-				keyLeft = true;
-				break;
-			case KeyEvent.VK_SPACE:
-				model.mario.isJumping = true;
-				break;
-			case KeyEvent.VK_S:
-				keySave = true; 
-				break;
-			case KeyEvent.VK_L:
-				keyLoad = true;
-				break;
-			default:
-				break;
-		}
-	}
+        model.sprites.add(new Brick(e.getX() + model.mario.x, e.getY(), 0, 0));
+    }
 
-	public void keyReleased(KeyEvent e) {
-		switch(e.getKeyCode()) {
-			case KeyEvent.VK_RIGHT:
-				keyRight = false;
-				break;
-			case KeyEvent.VK_LEFT:
-				keyLeft = false;
-				break;
-			case KeyEvent.VK_SPACE:
-				model.mario.isJumping = false;
-				break;
-			case KeyEvent.VK_S:
-				keySave = false;
-				break;
-			case KeyEvent.VK_L:
-				keyLoad = false;
-				break;
-			case KeyEvent.VK_E:
-				editEnabled = !editEnabled;
-				System.out.println("edit mode: " + editEnabled);
-				break;
-			default:
-				break;
-		}
-	}
+    public void mouseReleased(MouseEvent e) {
+        if (!editEnabled) {
+            return;
+        }
 
-	public void keyTyped(KeyEvent e) {}
+        Sprite b = model.sprites.get(model.sprites.size() - 1);
 
-	void update() {
-		if (keyRight) {
-			model.mario.setPos(model.mario.x + 10, model.mario.y);
-			model.mario.direction = 1;
-			model.checkCollision();
-		}
+        b.w = e.getX() - b.x + model.mario.x;
+        b.h = e.getY() - b.y;
+    }
 
-		if (keyLeft) {
-			model.mario.setPos(model.mario.x - 10, model.mario.y);
-			model.mario.direction = -1;
-			model.checkCollision();
-		}
-		
-		model.mario.setWalking(keyRight || keyLeft);
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
 
-		if (keySave) {
-			model.marshall();
-			System.out.println("saved map");
-		}
+    public void mouseClicked(MouseEvent e) {
+        if(e.getY() < 100) {
+            System.out.println("break here");
+        }
+    }
 
-		if (keyLoad) {
-			try {
-				model.unmarshall();
-				System.out.println("loaded map");
-			}
-			catch (Exception e) {
-				e.printStackTrace(System.err);
-				System.exit(1);
-			}
-		}
-	}
+    //-------------------------------------------
+    // keyboard functionality
+
+    public void keyPressed(KeyEvent e) {
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_RIGHT:
+                keyRight = true;
+                break;
+            case KeyEvent.VK_LEFT:
+                keyLeft = true;
+                break;
+            case KeyEvent.VK_SPACE:
+                model.mario.isJumping = true;
+                break;
+            case KeyEvent.VK_S:
+                keySave = true;
+                break;
+            case KeyEvent.VK_L:
+                keyLoad = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_RIGHT:
+                keyRight = false;
+                break;
+            case KeyEvent.VK_LEFT:
+                keyLeft = false;
+                break;
+            case KeyEvent.VK_SPACE:
+                model.mario.isJumping = false;
+                break;
+            case KeyEvent.VK_S:
+                keySave = false;
+                break;
+            case KeyEvent.VK_L:
+                keyLoad = false;
+                break;
+            case KeyEvent.VK_E:
+                editEnabled = !editEnabled;
+                System.out.println("edit mode: " + editEnabled);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void keyTyped(KeyEvent e) {}
+
+    void update() {
+        if (keyRight) {
+            model.mario.setPos(model.mario.x + 10, model.mario.y);
+            model.mario.direction = 1;
+            model.checkCollision();
+        }
+
+        if (keyLeft) {
+            model.mario.setPos(model.mario.x - 10, model.mario.y);
+            model.mario.direction = -1;
+            model.checkCollision();
+        }
+
+        model.mario.setWalking(keyRight || keyLeft);
+
+        if (keySave) {
+            model.marshall();
+            System.out.println("saved map");
+        }
+
+        if (keyLoad) {
+            try {
+                model.unmarshall();
+                System.out.println("loaded map");
+            }
+            catch (Exception e) {
+                e.printStackTrace(System.err);
+                System.exit(1);
+            }
+        }
+    }
 }

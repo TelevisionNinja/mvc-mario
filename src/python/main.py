@@ -23,7 +23,7 @@ class Sprite(ABC):
     @abstractmethod
     def update(self):
         pass
-    
+
     @abstractmethod
     def draw(self, g, offset):
         pass
@@ -32,11 +32,11 @@ class Brick(Sprite):
     def __init__(self, x = 0, y = 0, w = 0, h = 0):
         super().__init__(x, y, w, h)
         self.type = "brick"
-        
+
         self.image = None
         if self.image == None:
             self.loadImage()
-    
+
     def loadImage(self):
         # load images
         try:
@@ -53,7 +53,7 @@ class Brick(Sprite):
     # 		w:self.w,
     # 		h:self.h
     # 	return obj
-    
+
     def draw(self, g, offset):
         g.blit(self.image, (self.x - offset, self.y))
 
@@ -81,7 +81,7 @@ class Mario(Sprite):
         if len(self.images) == 0:
             for i in range(1, 6):
                 self.images.append(self._loadImage("mario" + str(i) + ".png"))
-        
+
         self.w = self.images[0].get_rect().width
         self.h = self.images[0].get_rect().height
 
@@ -92,14 +92,14 @@ class Mario(Sprite):
             print(Exception, "mario loading error")
 
         return None
-    
+
     def setWalking(self, b):
         self.isWalking = b
-    
+
     def setPos(self, x, y):
         self.previousX = self.x
         self.previousY = self.y
-        
+
         self.x = x
         self.y = y
 
@@ -107,11 +107,11 @@ class Mario(Sprite):
         # update mario image
         if self.isWalking:
             self.currentMarioFrameIndex = (self.currentMarioFrameIndex + 1) % len(self.images)
-        
+
         # gravity
         self.vert_vel += 1.5
         self.setPos(self.x, int(self.y + self.vert_vel)) # convert to int
-        
+
         # snap back to the ground
         if self.y > 500:
             self.y = 500
@@ -138,7 +138,7 @@ class Mario(Sprite):
             frame = self.images[self.currentMarioFrameIndex]
             flipped = pygame.transform.flip(frame, True, False)
             g.blit(flipped, (self.screenLocation, self.y))
-            
+
         else:
             g.blit(self.images[self.currentMarioFrameIndex], (self.screenLocation, self.y))
 
@@ -149,8 +149,8 @@ class Coin(Sprite):
 
         self.image = None
         self.vertical = 0
-        
-        if self.image == None:			
+
+        if self.image == None:
             try:
                 self.image = pygame.image.load("coin.png")
                 self.w = self.image.get_rect().width
@@ -165,12 +165,12 @@ class Coin(Sprite):
 
         if randDirection == 0:
             randDirection = -1
-        
+
         self.horizontal = randDirection * random.uniform(1, 13)
 
     def update(self):
         self.x += self.horizontal
-        
+
         # gravity
         self.y += self.vertical
         self.vertical += 1.2
@@ -192,46 +192,46 @@ class CoinBrick(Brick):
 
         self.w = self.images[0].get_rect().width
         self.h = self.images[0].get_rect().height
-    
+
     def _loadImage(self, fileName):
         try:
             return pygame.image.load(fileName)
         except Exception:
             print(Exception, "coin brick laoding error")
-        
+
         return None
-    
+
     def _loadImages(self):
-        if not len(self.images):			
+        if not len(self.images):
             for i in range(1,3):
                 self.images.append(self._loadImage("block" + str(i) + ".png"))
 
     def spawnCoin(self):
         if self.coinsLeft > 0:
             self.coinsLeft -= 1
-            
+
             if self.coinsLeft == 0:
                 self.imageIndex = 1
 
             return Coin(self.x, self.y)
-        
+
         return None
-    
+
     def update(self):
         pass
 
     def draw(self, g, offset):
         g.blit(self.images[self.imageIndex], (self.x - offset, self.y))
-    
+
     # Marshals this object into a JSON DOM
     # marshal(self):
     # 	obj =:
     # 		x: self.x,
     # 		y: self.y
-    # 	
+    #
 
     # 	return obj
-    # 
+    #
 
 class Model:
     def __init__(self):
@@ -246,37 +246,37 @@ class Model:
 
     # marshall(self):
     # 	saveFile = Json.newObject()
-        
+
     # 	tmpListBricks = Json.newList()
     # 	tmpListCoinBLocks = Json.newList()
-        
+
     # 	for (i = 0 i < self.sprites.size() i += 1):
     # 		b = self.sprites.get(i)
     # 		if b.type == "brick":
     # 			tmpListBricks.add(b).marshal()
-    # 		
+    #
     # 		elif b.type == "coinBrick":
     # 			tmpListCoinBLocks.add(b).marshal()
-        
+
     # 	saveFile.add("bricks", tmpListBricks)
     # 	saveFile.add("coinBricks", tmpListCoinBLocks)
     # 	saveFile.save("map.json")
-    # 
-    
+    #
+
     def unmarshall(self):
         # self.sprites = []
         # self.sprites.append(self.mario)
         # saveFile = Json.load("map.json")
-        
+
         # tmpList = saveFile.get("bricks")
         # for (i = 0 i < tmpList.size() i += 1):
         # 	self.sprites.append(Brick(tmpList.get(i)))
-        # 
-        
+        #
+
         # tmpList = saveFile.get("coinBricks")
         # for (i = 0 i < tmpList.size() i += 1):
         # 	self.sprites.append(CoinBrick(tmpList.get(i)))
-        # 
+        #
 
         # hardcoded bricks
 
@@ -305,20 +305,20 @@ class Model:
         checkBottom = deltaBottom >= 0
 
         return not (checkLeft or checkRight or checkTop or checkBottom)
-    
+
     def _correctPos(self, b):
         if self.mario.previousY < self.mario.y:
             self.mario.y = b.y - self.mario.h
 
             self.mario.vert_vel = 0.0
             self.mario.jumpFrame = 0
-        
+
         elif self.mario.previousY > self.mario.y:
             self.mario.y = b.y + b.h
-            
+
             self.mario.vert_vel = 0.0
             self.mario.jumpFrame = self.mario.jumpAmount
-            
+
             # coinblock collision
             if b.type == "coinBrick":
                 newCoin = b.spawnCoin()
@@ -344,13 +344,13 @@ class Model:
             elif self._isCollision(self.mario, b):
                 if b.type == "brick" or b.type == "coinBrick":
                     self._correctPos(b)
-            
+
             i += 1
 
     def update(self):
         for s in self.sprites:
             s.update()
-        
+
         self.checkCollision()
 
 class View:
@@ -376,7 +376,7 @@ class View:
             self.ground = pygame.transform.scale(self.ground, (self.background.get_rect().width, self.ground.get_rect().height))
         except Exception:
             print(Exception, "backgroun error")
-    
+
     def update(self):
         # draw background color
         self.screen.fill([0,255,255])
@@ -386,7 +386,7 @@ class View:
 
         # draw ground line
         pygame.draw.line(self.screen, (0,0,0), (0, self.groundLevel), (2000, self.groundLevel))
-        
+
         # draw ground image
         self.screen.blit(self.ground, (-self.model.mario.x, self.groundLevel))
 
@@ -408,10 +408,10 @@ class Controller:
         self.keySave = False
         self.keyLoad = False
         self.editEnabled = False
-    
+
     def setView(self, v):
         self.view = v
-    
+
     #-------------------------------------------
     # mouse functionality
 
@@ -420,24 +420,24 @@ class Controller:
             return
 
         mouseX, mouseY = pygame.mouse.get_pos()
-    
+
         self.model.sprites.append(Brick(mouseX + self.model.mario.x, mouseY, 0, 0))
 
     def _mouseReleased(self):
         if not self.editEnabled:
             return
-        
+
         b = self.model.sprites[-1]
-        
+
         mouseX, mouseY = pygame.mouse.get_pos()
 
         b.w = mouseX - b.x + self.model.mario.x
         b.h = mouseY - b.y
         b.loadImage()
-    
+
     #-------------------------------------------
     # keyboard functionality
-    
+
     def _keyPressed(self):
         # match k:
         #     case pygame.K_RIGHT:
@@ -447,10 +447,10 @@ class Controller:
         #     case pygame.K_SPACE:
         #         self.model.mario.isJumping = True
         #     # case pygame.K_s:
-        #     # 	self.keySave = True 
+        #     # 	self.keySave = True
         #     case pygame.K_l:
         #         self.keyLoad = True
-        
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_RIGHT]:
@@ -466,7 +466,7 @@ class Controller:
         else:
             self.model.mario.isJumping = False
         # if keys[pygame.K_s]:
-        # 	self.keySave = True 
+        # 	self.keySave = True
         if keys[pygame.K_l]:
             self.keyLoad = True
         else:

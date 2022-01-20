@@ -8,8 +8,8 @@ recreate the Java Mario in Javascript
 -->
 
 <head>
-	<title>Mario</title>
-	<meta charset="UTF-8">
+    <title>Mario</title>
+    <meta charset="UTF-8">
 </head>
 <body>
 <br>
@@ -22,639 +22,639 @@ let preloadCoin = new Image();
 preloadCoin.src = "coin.png";
 
 class Sprite {
-	constructor(x = 0, y = 0, w = 0, h = 0) {
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-		this.type = "";
-	}
+    constructor(x = 0, y = 0, w = 0, h = 0) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.type = "";
+    }
 
-	update() {}
+    update() {}
 
-	draw(g, offset) {}
+    draw(g, offset) {}
 }
 
 class Brick extends Sprite {
-	constructor(x = 0, y = 0, w = 0, h = 0) {
-		super(x, y, w, h);
-		this.type = "brick";
+    constructor(x = 0, y = 0, w = 0, h = 0) {
+        super(x, y, w, h);
+        this.type = "brick";
 
-		this.image = null;
-		this.#loadImage();
-	}
+        this.image = null;
+        this.#loadImage();
+    }
 
-	#loadImage() {
-		// load images
-		if (this.image == null) {			
-			try {
-				this.image = new Image();
-				this.image.src = "brick.png";
-			}
-			catch(e) {
-				console.log(e);
-			}
-		}
-	}
+    #loadImage() {
+        // load images
+        if (this.image == null) {
+            try {
+                this.image = new Image();
+                this.image.src = "brick.png";
+            }
+            catch(e) {
+                console.log(e);
+            }
+        }
+    }
 
-	// Marshals this object into a JSON DOM
-	// marshal() {
-	// 	let obj = {
-	// 		x:this.x,
-	// 		y:this.y,
-	// 		w:this.w,
-	// 		h:this.h
-	// 	}
+    // Marshals this object into a JSON DOM
+    // marshal() {
+    // 	let obj = {
+    // 		x:this.x,
+    // 		y:this.y,
+    // 		w:this.w,
+    // 		h:this.h
+    // 	}
 
-	// 	return obj;
-	// }
+    // 	return obj;
+    // }
 
-	draw(g, offset) {
-		g.drawImage(this.image, this.x - offset, this.y, this.w, this.h);
-	}
+    draw(g, offset) {
+        g.drawImage(this.image, this.x - offset, this.y, this.w, this.h);
+    }
 
-	update() {}
+    update() {}
 }
 
 class Mario extends Sprite {
-	constructor() {
-		super();
-		this.previousX = 0;
-		this.previousY = 0;
-		this.direction = 1,
-		this.currentMarioFrameIndex = 0,
-		this.screenLocation = 0;
-		this.vert_vel = 0;
-		this.images = [];
-		this.isWalking = false;
-		this.isJumping = false;
-		this.jumpFrame = 0;
-		this.jumpDuration = 20;
-		this.jumpAmount = 20;
+    constructor() {
+        super();
+        this.previousX = 0;
+        this.previousY = 0;
+        this.direction = 1,
+        this.currentMarioFrameIndex = 0,
+        this.screenLocation = 0;
+        this.vert_vel = 0;
+        this.images = [];
+        this.isWalking = false;
+        this.isJumping = false;
+        this.jumpFrame = 0;
+        this.jumpDuration = 20;
+        this.jumpAmount = 20;
 
-		window.addEventListener("load", () => {
-			this.w = this.images[0].width;
-			this.h = this.images[0].height;
-		});
+        window.addEventListener("load", () => {
+            this.w = this.images[0].width;
+            this.h = this.images[0].height;
+        });
 
-		// load mario images
-		if (!this.images.length) {
-			for (let i = 0; i < 5; i++) {
-				this.images.push(this.#loadImage("mario" + (i + 1) + ".png"));
-			}
-		}
+        // load mario images
+        if (!this.images.length) {
+            for (let i = 0; i < 5; i++) {
+                this.images.push(this.#loadImage("mario" + (i + 1) + ".png"));
+            }
+        }
 
-		this.type = "mario";
-	}
+        this.type = "mario";
+    }
 
-	#loadImage(fileName) {
-		try {
-			let img = new Image();
-			img.src = fileName;
-			return img;
-		}
-		catch(e) {
-			console.log(e);
-		}
+    #loadImage(fileName) {
+        try {
+            let img = new Image();
+            img.src = fileName;
+            return img;
+        }
+        catch(e) {
+            console.log(e);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	setWalking(b) {
-		this.isWalking = b;
-	}
+    setWalking(b) {
+        this.isWalking = b;
+    }
 
-	setPos(x, y) {
-		this.previousX = this.x;
-		this.previousY = this.y;
-		
-		this.x = x;
-		this.y = y;
-	}
+    setPos(x, y) {
+        this.previousX = this.x;
+        this.previousY = this.y;
 
-	update() {
-		// update mario image
-		if (this.isWalking) {
-			this.currentMarioFrameIndex = (this.currentMarioFrameIndex + 1) % this.images.length;
-		}
+        this.x = x;
+        this.y = y;
+    }
 
-		// gravity
-		this.vert_vel += 1.5;
-		this.setPos(this.x, ~~(this.y + this.vert_vel)); // convert to int
+    update() {
+        // update mario image
+        if (this.isWalking) {
+            this.currentMarioFrameIndex = (this.currentMarioFrameIndex + 1) % this.images.length;
+        }
 
-		// snap back to the ground
-		if (this.y > 500) {
-			this.y = 500;
-			this.previousY = 500;
-			this.vert_vel = 0;
-		}
+        // gravity
+        this.vert_vel += 1.5;
+        this.setPos(this.x, ~~(this.y + this.vert_vel)); // convert to int
 
-		// jump
-		if (this.isJumping) {
-			this.jumpFrame++;
+        // snap back to the ground
+        if (this.y > 500) {
+            this.y = 500;
+            this.previousY = 500;
+            this.vert_vel = 0;
+        }
 
-			if (this.jumpFrame < this.jumpDuration) {
-				this.vert_vel = 0;
-				this.setPos(this.x, this.previousY - this.jumpAmount);
-			}
-			else if (this.vert_vel == 0) {
-				this.jumpFrame = 0;
-			}
-		}
-		else {
-			if (this.vert_vel == 0) {
-				this.jumpFrame = 0;
-			}
-			else {
-				this.jumpFrame = this.jumpDuration;
-			}
-		}
-	}
-	
-	draw(g, offset) {
-		if (this.direction < 0) {
-			g.translate(this.screenLocation + this.w, this.y);
-			g.scale(-1, 1);
-			g.drawImage(this.images[this.currentMarioFrameIndex], 0, 0, this.w, this.h);
-			g.setTransform(1,0,0,1,0,0);
-		}
-		else {
-			g.drawImage(this.images[this.currentMarioFrameIndex], this.screenLocation, this.y, this.w, this.h);
-		}
-	}
+        // jump
+        if (this.isJumping) {
+            this.jumpFrame++;
+
+            if (this.jumpFrame < this.jumpDuration) {
+                this.vert_vel = 0;
+                this.setPos(this.x, this.previousY - this.jumpAmount);
+            }
+            else if (this.vert_vel == 0) {
+                this.jumpFrame = 0;
+            }
+        }
+        else {
+            if (this.vert_vel == 0) {
+                this.jumpFrame = 0;
+            }
+            else {
+                this.jumpFrame = this.jumpDuration;
+            }
+        }
+    }
+
+    draw(g, offset) {
+        if (this.direction < 0) {
+            g.translate(this.screenLocation + this.w, this.y);
+            g.scale(-1, 1);
+            g.drawImage(this.images[this.currentMarioFrameIndex], 0, 0, this.w, this.h);
+            g.setTransform(1,0,0,1,0,0);
+        }
+        else {
+            g.drawImage(this.images[this.currentMarioFrameIndex], this.screenLocation, this.y, this.w, this.h);
+        }
+    }
 }
 
 class Coin extends Sprite {
-	constructor(x, y) {
-		super(x,y);
-		this.type = "coin";
+    constructor(x, y) {
+        super(x,y);
+        this.type = "coin";
 
-		this.image = null;
-		this.vertical = 0;
-		
-		if (this.image == null) {			
-			try {
-				this.image = new Image();
-				this.image.src = "coin.png";
-				this.w = this.image.width;
-				this.h = this.image.height;
-				this.y -= this.h;
-			}
-			catch(e) {
-				console.log(e);
-			}
-		}
+        this.image = null;
+        this.vertical = 0;
 
-		// generate random direction
-		let randDirection = ~~(Math.random() * -2); // convert to an int
-		if (randDirection == 0) {
-			randDirection = 1;
-		}
-		this.horizontal = randDirection * (Math.random() * 12 + 1);
-	}
+        if (this.image == null) {
+            try {
+                this.image = new Image();
+                this.image.src = "coin.png";
+                this.w = this.image.width;
+                this.h = this.image.height;
+                this.y -= this.h;
+            }
+            catch(e) {
+                console.log(e);
+            }
+        }
 
-	update() {
-		this.x += this.horizontal;
-		
-		// gravity
-		this.y += this.vertical;
-		this.vertical += 1.2;
-	}
+        // generate random direction
+        let randDirection = ~~(Math.random() * -2); // convert to an int
+        if (randDirection == 0) {
+            randDirection = 1;
+        }
+        this.horizontal = randDirection * (Math.random() * 12 + 1);
+    }
 
-	draw(g, offset) {
-		g.drawImage(this.image, this.x - offset, this.y, this.w, this.h);
-	}
+    update() {
+        this.x += this.horizontal;
+
+        // gravity
+        this.y += this.vertical;
+        this.vertical += 1.2;
+    }
+
+    draw(g, offset) {
+        g.drawImage(this.image, this.x - offset, this.y, this.w, this.h);
+    }
 }
 
 class CoinBrick extends Brick {
-	constructor(x, y) {
-		super(x, y)
-		this.type = "coinBrick";
+    constructor(x, y) {
+        super(x, y)
+        this.type = "coinBrick";
 
-		this.hit = false;
-		this.coinsLeft = 5;
-		this.imageIndex = 0;
-		this.images = [];
+        this.hit = false;
+        this.coinsLeft = 5;
+        this.imageIndex = 0;
+        this.images = [];
 
-		window.addEventListener("load", () => {
-			this.w = this.images[0].width;
-			this.h = this.images[0].height;
-		});
+        window.addEventListener("load", () => {
+            this.w = this.images[0].width;
+            this.h = this.images[0].height;
+        });
 
-		this.#loadImages();
+        this.#loadImages();
 
-		this.w = this.images[0].width;
-		this.h = this.images[0].height;
-	}
-	
-	#loadImages() {
-		if (!this.images.length) {			
-			for (let i = 0; i < 2; i++) {
-				this.images.push(this.#loadImage("block" + (i + 1) + ".png"));
-			}
-		}
-	}
-	
-	#loadImage(fileName) {
-		try {
-			let img = new Image();
-			img.src = fileName;
-			return img;
-		}
-		catch(e) {
-			console.log(e);
-		}
-		
-		return null;
-	}
-	
-	spawnCoin() {
-		if (this.coinsLeft > 0) {
-			this.coinsLeft--;
-			
-			if (this.coinsLeft == 0) {
-				this.imageIndex = 1;
-			}
-			
-			return new Coin(this.x, this.y);
-		}
-		
-		return null;
-	}
+        this.w = this.images[0].width;
+        this.h = this.images[0].height;
+    }
 
-	update() {}
+    #loadImages() {
+        if (!this.images.length) {
+            for (let i = 0; i < 2; i++) {
+                this.images.push(this.#loadImage("block" + (i + 1) + ".png"));
+            }
+        }
+    }
 
-	draw(g, offset) {
-		g.drawImage(this.images[this.imageIndex], this.x - offset, this.y, this.w, this.h);
-	}
-	
-	// Marshals this object into a JSON DOM
-	// marshal() {
-	// 	let obj = {
-	// 		x: this.x,
-	// 		y: this.y
-	// 	}
+    #loadImage(fileName) {
+        try {
+            let img = new Image();
+            img.src = fileName;
+            return img;
+        }
+        catch(e) {
+            console.log(e);
+        }
 
-	// 	return obj;
-	// }
+        return null;
+    }
+
+    spawnCoin() {
+        if (this.coinsLeft > 0) {
+            this.coinsLeft--;
+
+            if (this.coinsLeft == 0) {
+                this.imageIndex = 1;
+            }
+
+            return new Coin(this.x, this.y);
+        }
+
+        return null;
+    }
+
+    update() {}
+
+    draw(g, offset) {
+        g.drawImage(this.images[this.imageIndex], this.x - offset, this.y, this.w, this.h);
+    }
+
+    // Marshals this object into a JSON DOM
+    // marshal() {
+    // 	let obj = {
+    // 		x: this.x,
+    // 		y: this.y
+    // 	}
+
+    // 	return obj;
+    // }
 }
 
 class Model {
-	constructor() {
-		this.sprites = [];
-		this.mario = new Mario();
-		
-		// load map on startup
-		try {
-			this.unmarshall();
-		}
-		catch (e) {
-			console.log(e);
-		}
-	}
-	
-	// marshall() {
-	// 	let saveFile = Json.newObject();
-		
-	// 	let tmpListBricks = Json.newList();
-	// 	let tmpListCoinBLocks = Json.newList();
-		
-	// 	for (let i = 0; i < this.sprites.size(); i++) {
-	// 		let b = this.sprites.get(i);
-	// 		if (b.type == "brick") {
-	// 			tmpListBricks.add(b).marshal();
-	// 		}
-	// 		else if (b.type == "coinBrick") {
-	// 			tmpListCoinBLocks.add(b).marshal();
-	// 		}
-	// 	}
-		
-	// 	saveFile.add("bricks", tmpListBricks);
-	// 	saveFile.add("coinBricks", tmpListCoinBLocks);
-	// 	saveFile.save("map.json");
-	// }
-	
-	unmarshall() {
-		// this.sprites = [];
-		// this.sprites.push(this.mario);
-		// let saveFile = Json.load("map.json");
-		
-		// let tmpList = saveFile.get("bricks");
-		// for (let i = 0; i < tmpList.size(); i++) {
-		// 	this.sprites.push(new Brick(tmpList.get(i)));
-		// }
-		
-		// tmpList = saveFile.get("coinBricks");
-		// for (let i = 0; i < tmpList.size(); i++) {
-		// 	this.sprites.push(new CoinBrick(tmpList.get(i)));
-		// }
+    constructor() {
+        this.sprites = [];
+        this.mario = new Mario();
 
-		// hardcoded bricks
+        // load map on startup
+        try {
+            this.unmarshall();
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
 
-		this.sprites = [];
-		//this.sprites.splice(0, this.sprites.length);
-		this.sprites.push(this.mario);
+    // marshall() {
+    // 	let saveFile = Json.newObject();
 
-		this.sprites.push(new Brick(42,337,425,46));
-		this.sprites.push(new Brick(126,414,148,234));
-		this.sprites.push(new Brick(737,480,99,130));
-		this.sprites.push(new Brick(860,270,124,110));
-		this.sprites.push(new Brick(105,243,146,141));
+    // 	let tmpListBricks = Json.newList();
+    // 	let tmpListCoinBLocks = Json.newList();
 
-		this.sprites.push(new CoinBrick(280,35));
-		this.sprites.push(new CoinBrick(1100,250));
-		this.sprites.push(new CoinBrick(1000,500));
-	}
+    // 	for (let i = 0; i < this.sprites.size(); i++) {
+    // 		let b = this.sprites.get(i);
+    // 		if (b.type == "brick") {
+    // 			tmpListBricks.add(b).marshal();
+    // 		}
+    // 		else if (b.type == "coinBrick") {
+    // 			tmpListCoinBLocks.add(b).marshal();
+    // 		}
+    // 	}
 
-	#isCollision(m, b) {
-		let deltaLeft = (b.x - m.x) - (m.w + m.screenLocation),
-			deltaRight = m.screenLocation - (b.w + b.x - m.x),
-			deltaTop = b.y - (m.h + m.y),
-			deltaBottom = m.y - (b.h + b.y);
+    // 	saveFile.add("bricks", tmpListBricks);
+    // 	saveFile.add("coinBricks", tmpListCoinBLocks);
+    // 	saveFile.save("map.json");
+    // }
 
-		let checkLeft = deltaLeft >= 0,
-			checkRight = deltaRight >= 0,
-			checkTop = deltaTop >= 0,
-			checkBottom = deltaBottom >= 0;
+    unmarshall() {
+        // this.sprites = [];
+        // this.sprites.push(this.mario);
+        // let saveFile = Json.load("map.json");
 
-		if (checkLeft || checkRight || checkTop || checkBottom) {
-			return false;
-		}
+        // let tmpList = saveFile.get("bricks");
+        // for (let i = 0; i < tmpList.size(); i++) {
+        // 	this.sprites.push(new Brick(tmpList.get(i)));
+        // }
 
-		return true;
-	}
-	
-	#correctPos(b) {
-		if (this.mario.previousY < this.mario.y) {
-			this.mario.y = b.y - this.mario.h;
+        // tmpList = saveFile.get("coinBricks");
+        // for (let i = 0; i < tmpList.size(); i++) {
+        // 	this.sprites.push(new CoinBrick(tmpList.get(i)));
+        // }
 
-			this.mario.vert_vel = 0.0;
-			this.mario.jumpFrame = 0;
-		}
-		else if (this.mario.previousY > this.mario.y) {
-			this.mario.y = b.y + b.h;
-			
-			this.mario.vert_vel = 0.0;
-			this.mario.jumpFrame = this.mario.jumpAmount;
-			
-			// coinblock collision
-			if (b.type == "coinBrick") {
-				let newCoin = b.spawnCoin();
-				if (newCoin != null) {
-					this.sprites.push(newCoin);
-				}
-			}
-		}
-		
-		if (this.mario.previousX < this.mario.x) {
-			this.mario.x = b.x - (this.mario.w + this.mario.screenLocation);
-		}
-		else if (this.mario.previousX > this.mario.x) {
-			this.mario.x = b.w + b.x - this.mario.screenLocation;
-		}
-	}
-	
-	checkCollision() {
-		for (let i = 0; i < this.sprites.length; i++) {
-			let b = this.sprites[i];
+        // hardcoded bricks
 
-			// remove coins
-			if (b.type == "coin") {
-				if (b.y > 720) {
-					this.sprites.splice(i, 1);
-					i--;
-				}
-			}
-			
-			// collision
-			else if (this.#isCollision(this.mario, b)) {
-				if (b.type == "brick" || b.type == "coinBrick") {
-					this.#correctPos(b);
-				}
-			}
-		}
-	}
-	
-	update() {
-		let iter = this.sprites[Symbol.iterator]();
+        this.sprites = [];
+        //this.sprites.splice(0, this.sprites.length);
+        this.sprites.push(this.mario);
 
-		for (let i of iter) {
-			i.update();
-		}
-		
-		this.checkCollision();
-	}
+        this.sprites.push(new Brick(42,337,425,46));
+        this.sprites.push(new Brick(126,414,148,234));
+        this.sprites.push(new Brick(737,480,99,130));
+        this.sprites.push(new Brick(860,270,124,110));
+        this.sprites.push(new Brick(105,243,146,141));
+
+        this.sprites.push(new CoinBrick(280,35));
+        this.sprites.push(new CoinBrick(1100,250));
+        this.sprites.push(new CoinBrick(1000,500));
+    }
+
+    #isCollision(m, b) {
+        let deltaLeft = (b.x - m.x) - (m.w + m.screenLocation),
+            deltaRight = m.screenLocation - (b.w + b.x - m.x),
+            deltaTop = b.y - (m.h + m.y),
+            deltaBottom = m.y - (b.h + b.y);
+
+        let checkLeft = deltaLeft >= 0,
+            checkRight = deltaRight >= 0,
+            checkTop = deltaTop >= 0,
+            checkBottom = deltaBottom >= 0;
+
+        if (checkLeft || checkRight || checkTop || checkBottom) {
+            return false;
+        }
+
+        return true;
+    }
+
+    #correctPos(b) {
+        if (this.mario.previousY < this.mario.y) {
+            this.mario.y = b.y - this.mario.h;
+
+            this.mario.vert_vel = 0.0;
+            this.mario.jumpFrame = 0;
+        }
+        else if (this.mario.previousY > this.mario.y) {
+            this.mario.y = b.y + b.h;
+
+            this.mario.vert_vel = 0.0;
+            this.mario.jumpFrame = this.mario.jumpAmount;
+
+            // coinblock collision
+            if (b.type == "coinBrick") {
+                let newCoin = b.spawnCoin();
+                if (newCoin != null) {
+                    this.sprites.push(newCoin);
+                }
+            }
+        }
+
+        if (this.mario.previousX < this.mario.x) {
+            this.mario.x = b.x - (this.mario.w + this.mario.screenLocation);
+        }
+        else if (this.mario.previousX > this.mario.x) {
+            this.mario.x = b.w + b.x - this.mario.screenLocation;
+        }
+    }
+
+    checkCollision() {
+        for (let i = 0; i < this.sprites.length; i++) {
+            let b = this.sprites[i];
+
+            // remove coins
+            if (b.type == "coin") {
+                if (b.y > 720) {
+                    this.sprites.splice(i, 1);
+                    i--;
+                }
+            }
+
+            // collision
+            else if (this.#isCollision(this.mario, b)) {
+                if (b.type == "brick" || b.type == "coinBrick") {
+                    this.#correctPos(b);
+                }
+            }
+        }
+    }
+
+    update() {
+        let iter = this.sprites[Symbol.iterator]();
+
+        for (let i of iter) {
+            i.update();
+        }
+
+        this.checkCollision();
+    }
 }
 
 class View {
-	constructor(c, m, w, h) {
-		this.canvas = document.getElementById("myCanvas");
-		this.model = m;
-		this.background = null;
-		this.ground = null;
-		this.groundLevel = 596;
-		this.width = w;
-		this.height = h;
+    constructor(c, m, w, h) {
+        this.canvas = document.getElementById("myCanvas");
+        this.model = m;
+        this.background = null;
+        this.ground = null;
+        this.groundLevel = 596;
+        this.width = w;
+        this.height = h;
 
-		c.setView(this);
-		
-		if (this.background != null && this.ground != null) {
-			return;
-		}
+        c.setView(this);
 
-		try {
-			this.background = new Image();
-			this.background.src = "sky.jpg";
-			this.ground = new Image();
-			this.ground.src = "ground.png";
-		}
-		catch(e) {
-			console.log(e);
-		}
-	}
-	
-	update() {
-		let g = this.canvas.getContext("2d");
-		g.clearRect(0, 0, this.width * 10, this.height * 10);
+        if (this.background != null && this.ground != null) {
+            return;
+        }
 
-		// draw background color
-		g.fillStyle = "#80ffff";
-		g.fillRect(0, 0, this.width, this.height);
+        try {
+            this.background = new Image();
+            this.background.src = "sky.jpg";
+            this.ground = new Image();
+            this.ground.src = "ground.png";
+        }
+        catch(e) {
+            console.log(e);
+        }
+    }
 
-		// draw background image
-		g.drawImage(this.background, -(~~(this.model.mario.x/2)), 0, this.background.width, this.groundLevel);
+    update() {
+        let g = this.canvas.getContext("2d");
+        g.clearRect(0, 0, this.width * 10, this.height * 10);
 
-		// draw ground line
-		//g.fillStyle = "gray";
-		g.beginPath();
-		g.moveTo(0, this.groundLevel);
-		g.lineTo(2000, this.groundLevel);
-		g.stroke();
-		
-		// draw ground image
-		g.drawImage(this.ground, -this.model.mario.x, this.groundLevel, this.background.width, this.ground.height);
-		
-		// draw sprites
-		this.#drawSprites(g);
-	}
-	
-	#drawSprites(g) {
-		for(let i = 0; i < this.model.sprites.length; i++) {
-			let b = this.model.sprites[i];
-			b.draw(g, this.model.mario.x);
-		}
-	}
+        // draw background color
+        g.fillStyle = "#80ffff";
+        g.fillRect(0, 0, this.width, this.height);
+
+        // draw background image
+        g.drawImage(this.background, -(~~(this.model.mario.x/2)), 0, this.background.width, this.groundLevel);
+
+        // draw ground line
+        //g.fillStyle = "gray";
+        g.beginPath();
+        g.moveTo(0, this.groundLevel);
+        g.lineTo(2000, this.groundLevel);
+        g.stroke();
+
+        // draw ground image
+        g.drawImage(this.ground, -this.model.mario.x, this.groundLevel, this.background.width, this.ground.height);
+
+        // draw sprites
+        this.#drawSprites(g);
+    }
+
+    #drawSprites(g) {
+        for(let i = 0; i < this.model.sprites.length; i++) {
+            let b = this.model.sprites[i];
+            b.draw(g, this.model.mario.x);
+        }
+    }
 }
 
 class Controller {
-	constructor(m) {
-		this.model = m;
-		this.view;
-		this.keyLeft = false;
-		this.keyRight = false;
-		this.keySave = false;
-		this.keyLoad = false;
-		this.editEnabled = false;
-		let self = this;
+    constructor(m) {
+        this.model = m;
+        this.view;
+        this.keyLeft = false;
+        this.keyRight = false;
+        this.keySave = false;
+        this.keyLoad = false;
+        this.editEnabled = false;
+        let self = this;
 
-		document.addEventListener('keydown', function(event) { self.keyPressed(event); }, false);
-		document.addEventListener('keyup', function(event) { self.keyReleased(event); }, false);
-	}
-	
-	setView(v) {
-		this.view = v;
-		let self = this;
-		this.view.canvas.addEventListener("mousedown", function(event) { self.mousePressed(event); });
-		this.view.canvas.addEventListener("mouseup", function(event) { self.mouseReleased(event); });
-	}
-	
-	//-------------------------------------------
-	// mouse functionality
+        document.addEventListener('keydown', function(event) { self.keyPressed(event); }, false);
+        document.addEventListener('keyup', function(event) { self.keyReleased(event); }, false);
+    }
 
-	mousePressed(e) {
-		if (!this.editEnabled) {
-			return;
-		}
+    setView(v) {
+        this.view = v;
+        let self = this;
+        this.view.canvas.addEventListener("mousedown", function(event) { self.mousePressed(event); });
+        this.view.canvas.addEventListener("mouseup", function(event) { self.mouseReleased(event); });
+    }
 
-		this.model.sprites.push(new Brick(e.pageX + this.model.mario.x, e.pageY, 0, 0));
-	}
+    //-------------------------------------------
+    // mouse functionality
 
-	mouseReleased(e) {
-		if (!this.editEnabled) {
-			return;
-		}
+    mousePressed(e) {
+        if (!this.editEnabled) {
+            return;
+        }
 
-		let b = this.model.sprites[this.model.sprites.length - 1];
-		
-		b.w = e.pageX - b.x + this.model.mario.x;
-		b.h = e.pageY - b.y;
-	}
-	
-	//-------------------------------------------
-	// keyboard functionality
-	
-	keyPressed(e) {
-		switch(e.keyCode) {
-			case 39:
-				this.keyRight = true;
-				break;
-			case 37:
-				this.keyLeft = true;
-				break;
-			case 32:
-				this.model.mario.isJumping = true;
-				break;
-			// case 83:
-			// 	this.keySave = true; 
-			// 	break;
-			case 76:
-				this.keyLoad = true;
-				break;
-			default:
-				break;
-		}
-	}
+        this.model.sprites.push(new Brick(e.pageX + this.model.mario.x, e.pageY, 0, 0));
+    }
 
-	keyReleased(e) {
-		switch(e.keyCode) {
-			case 39:
-				this.keyRight = false;
-				break;
-			case 37:
-				this.keyLeft = false;
-				break;
-			case 32:
-				this.model.mario.isJumping = false;
-				break;
-			// case 83:
-			// 	this.keySave = false;
-			// 	break;
-			case 76:
-				this.keyLoad = false;
-				break;
-			case 69:
-				this.editEnabled = !this.editEnabled;
-				console.log("edit mode: " + this.editEnabled);
-				break;
-			default:
-				break;
-		}
-	}
+    mouseReleased(e) {
+        if (!this.editEnabled) {
+            return;
+        }
 
-	update() {
-		if (this.keyRight) {
-			this.model.mario.setPos(this.model.mario.x + 10, this.model.mario.y);
-			this.model.mario.direction = 1;
-			this.model.checkCollision();
-		}
+        let b = this.model.sprites[this.model.sprites.length - 1];
 
-		if (this.keyLeft) {
-			this.model.mario.setPos(this.model.mario.x - 10, this.model.mario.y);
-			this.model.mario.direction = -1;
-			this.model.checkCollision();
-		}
-		
-		this.model.mario.setWalking(this.keyRight || this.keyLeft);
+        b.w = e.pageX - b.x + this.model.mario.x;
+        b.h = e.pageY - b.y;
+    }
 
-		// if (this.keySave) {
-		// 	this.model.marshall();
-		// 	console.log("saved map");
-		// }
+    //-------------------------------------------
+    // keyboard functionality
 
-		if (this.keyLoad) {
-			try {
-				this.model.unmarshall();
-				console.log("loaded map");
-			}
-			catch (e) {
-				console.log(e);
-			}
-		}
-	}
+    keyPressed(e) {
+        switch(e.keyCode) {
+            case 39:
+                this.keyRight = true;
+                break;
+            case 37:
+                this.keyLeft = true;
+                break;
+            case 32:
+                this.model.mario.isJumping = true;
+                break;
+            // case 83:
+            // 	this.keySave = true;
+            // 	break;
+            case 76:
+                this.keyLoad = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    keyReleased(e) {
+        switch(e.keyCode) {
+            case 39:
+                this.keyRight = false;
+                break;
+            case 37:
+                this.keyLeft = false;
+                break;
+            case 32:
+                this.model.mario.isJumping = false;
+                break;
+            // case 83:
+            // 	this.keySave = false;
+            // 	break;
+            case 76:
+                this.keyLoad = false;
+                break;
+            case 69:
+                this.editEnabled = !this.editEnabled;
+                console.log("edit mode: " + this.editEnabled);
+                break;
+            default:
+                break;
+        }
+    }
+
+    update() {
+        if (this.keyRight) {
+            this.model.mario.setPos(this.model.mario.x + 10, this.model.mario.y);
+            this.model.mario.direction = 1;
+            this.model.checkCollision();
+        }
+
+        if (this.keyLeft) {
+            this.model.mario.setPos(this.model.mario.x - 10, this.model.mario.y);
+            this.model.mario.direction = -1;
+            this.model.checkCollision();
+        }
+
+        this.model.mario.setWalking(this.keyRight || this.keyLeft);
+
+        // if (this.keySave) {
+        // 	this.model.marshall();
+        // 	console.log("saved map");
+        // }
+
+        if (this.keyLoad) {
+            try {
+                this.model.unmarshall();
+                console.log("loaded map");
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
+    }
 }
 
 class Game {
-	// initialize game object
-	constructor() {
-		const width = 1280,
-		height = 720;
+    // initialize game object
+    constructor() {
+        const width = 1280,
+        height = 720;
 
-		this.model = new Model();
-		this.model.mario.screenLocation = ~~((width - this.model.mario.w)/2); // convert to int
-		this.controller = new Controller(this.model);
-		this.view = new View(this.controller, this.model, width, height);
-	}
-	
-	update() {
-		this.controller.update();
-		this.model.update(); // update model every frame
-		this.view.update(); // Indirectly calls View.paintComponent
-	}	
+        this.model = new Model();
+        this.model.mario.screenLocation = ~~((width - this.model.mario.w)/2); // convert to int
+        this.controller = new Controller(this.model);
+        this.view = new View(this.controller, this.model, width, height);
+    }
+
+    update() {
+        this.controller.update();
+        this.model.update(); // update model every frame
+        this.view.update(); // Indirectly calls View.paintComponent
+    }
 }
 
 let game = new Game();
 //40 milliseconds = 25 fps
-let timer = setInterval(() => game.update(), 40);
+setInterval(() => game.update(), 40);
 
 </script>
 
