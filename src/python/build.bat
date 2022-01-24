@@ -1,3 +1,3 @@
 ::@echo off
 echo Running Game...
-python Assignment8.py
+python main.py
