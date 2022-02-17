@@ -34,7 +34,7 @@ class Brick(Sprite):
         self.type = "brick"
 
         self.image = None
-        if self.image == None:
+        if self.image is None:
             self.loadImage()
 
     def loadImage(self):
@@ -150,7 +150,7 @@ class Coin(Sprite):
         self.image = None
         self.vertical = 0
 
-        if self.image == None:
+        if self.image is None:
             try:
                 self.image = pygame.image.load("coin.png")
                 self.w = self.image.get_rect().width
@@ -322,7 +322,7 @@ class Model:
             # coinblock collision
             if b.type == "coinBrick":
                 newCoin = b.spawnCoin()
-                if newCoin != None:
+                if newCoin is not None:
                     self.sprites.append(newCoin)
 
         if self.mario.previousX < self.mario.x:
@@ -365,7 +365,7 @@ class View:
 
         c.setView(self)
 
-        if self.background != None and self.ground != None:
+        if self.background is not None and self.ground is not None:
             return
 
         try:
