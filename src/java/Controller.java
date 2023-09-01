@@ -44,8 +44,8 @@ class Controller implements MouseListener, KeyListener {
         }
 
         Sprite b = model.sprites.get(model.sprites.size() - 1);
-        int mouseX = e.getX();
-        int mouseY = e.getY();
+        int mouseX = e.getX(),
+            mouseY = e.getY();
 
         if (mouseX > b.x) {
             b.w = mouseX - b.x;
