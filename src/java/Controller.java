@@ -35,7 +35,7 @@ class Controller implements MouseListener, KeyListener {
             return;
         }
 
-        model.sprites.add(new Brick(e.getX() + model.mario.x, e.getY(), 0, 0));
+        model.sprites.add(new Brick(e.getX(), e.getY(), 0, 0));
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -44,9 +44,26 @@ class Controller implements MouseListener, KeyListener {
         }
 
         Sprite b = model.sprites.get(model.sprites.size() - 1);
+        int mouseX = e.getX();
+        int mouseY = e.getY();
 
-        b.w = e.getX() - b.x + model.mario.x;
-        b.h = e.getY() - b.y;
+        if (mouseX > b.x) {
+            b.w = mouseX - b.x;
+        }
+        else {
+            b.w = b.x - mouseX;
+            b.x = mouseX;
+        }
+
+        b.x += model.mario.x;
+
+        if (mouseY > b.y) {
+            b.h = mouseY - b.y;
+        }
+        else {
+            b.h = b.y - mouseY;
+            b.y = mouseY;
+        }
     }
 
     public void mouseEntered(MouseEvent e) {}
