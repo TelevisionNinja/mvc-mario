@@ -375,7 +375,7 @@ class View:
             self.background = pygame.transform.scale(self.background, (self.background.get_rect().width, self.groundLevel))
             self.ground = pygame.transform.scale(self.ground, (self.background.get_rect().width, self.ground.get_rect().height))
         except Exception:
-            print(Exception, "backgroun error")
+            print(Exception, "background error")
 
     def update(self):
         # draw background color
