@@ -1,7 +1,7 @@
 # mvc-mario
 This was a school project where I had to make a mario like game with a model view controller architecture.
 
-The java version has the full functionality of the game. The javascript and python versions do not have the saving functionality, and the loading functionality is not fully implemented.
+The java version has the full functionality of the game. The javascript and python versions do not have the saving functionality, and the loading functionality only reloads the map.
 
 Python Dependencies:
 - pygame
