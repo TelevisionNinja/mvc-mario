@@ -536,7 +536,11 @@ class Controller {
             return;
         }
 
-        this.model.sprites.push(new Brick(e.pageX, e.pageY, 0, 0));
+        const canvas = document.getElementById('myCanvas').getBoundingClientRect();
+        const x = e.pageX - canvas.left,
+            y = e.pageY - canvas.top;
+
+        this.model.sprites.push(new Brick(x, y, 0, 0));
     }
 
     mouseReleased(e) {
@@ -544,9 +548,11 @@ class Controller {
             return;
         }
 
+        const canvas = document.getElementById('myCanvas').getBoundingClientRect();
+
         let b = this.model.sprites[this.model.sprites.length - 1];
-        const mouseX = e.pageX;
-        const mouseY = e.pageY;
+        const mouseX = e.pageX - canvas.left,
+            mouseY = e.pageY - canvas.top;
 
         if (mouseX > b.x) {
             b.w = mouseX - b.x;
