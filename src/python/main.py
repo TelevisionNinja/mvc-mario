@@ -421,7 +421,7 @@ class Controller:
 
         mouseX, mouseY = pygame.mouse.get_pos()
 
-        self.model.sprites.append(Brick(mouseX + self.model.mario.x, mouseY, 0, 0))
+        self.model.sprites.append(Brick(mouseX, mouseY, 0, 0))
 
     def _mouseReleased(self):
         if not self.editEnabled:
@@ -431,8 +431,20 @@ class Controller:
 
         mouseX, mouseY = pygame.mouse.get_pos()
 
-        b.w = mouseX - b.x + self.model.mario.x
-        b.h = mouseY - b.y
+        if mouseX > b.x:
+            b.w = mouseX - b.x
+        else:
+            b.w = b.x - mouseX
+            b.x = mouseX
+
+        b.x += self.model.mario.x
+
+        if mouseY > b.y:
+            b.h = mouseY - b.y
+        else:
+            b.h = b.y - mouseY
+            b.y = mouseY
+
         b.loadImage()
 
     #-------------------------------------------
